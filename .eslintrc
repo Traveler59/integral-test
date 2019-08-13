@@ -1,5 +1,5 @@
 {
-  "extends": "eslint:recommended",
+  "extends": "airbnb-base",
   "parser": "babel-eslint",
   "env": {
     "browser": true,
@@ -9,26 +9,13 @@
     "react"
   ],
   "rules": {
-    "no-var": 2,
-    "no-debugger": 0,
+    "linebreak-style": ["error", "windows"],
+    "id-length": 0,
     "no-console": 0,
-    "new-cap": 0,
-    "strict": 1,
-    "no-underscore-dangle": 0,
-    "no-use-before-define": 0,
-    "no-unused-vars": 1,
-    "eol-last": 0,
-    "quotes": [
-      1,
-      "single"
-    ],
-    "jsx-quotes": [
-      2,
-      "prefer-single"
-    ],
-    "react/jsx-no-undef": 1,
-    "react/jsx-uses-react": 1,
-    "react/jsx-uses-vars": 1
+    "no-unused-vars": [1, {"vars": "local", "args": "none"}],
+    "strict": 0,
+    "class-methods-use-this": 0,
+    "no-confusing-arrow": 0
   },
   "parserOptions": {
     "ecmaVersion": 6
