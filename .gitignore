@@ -62,9 +62,7 @@ typings/
 
 
 dist/
-flow-typed/
+flow-typed/npm/
 
-server.js
-webpack.config.js
 
 .vscode/

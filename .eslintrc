@@ -1,5 +1,5 @@
 {
-  "extends": "airbnb-base",
+  "extends": ["airbnb-base", "plugin:react/recommended"],
   "parser": "babel-eslint",
   "env": {
     "browser": true,
@@ -19,6 +19,6 @@
     "no-confusing-arrow": 0
   },
   "parserOptions": {
-    "ecmaVersion": 6
+    "ecmaVersion": 10
   }
 }
