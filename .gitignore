@@ -62,7 +62,7 @@ typings/
 
 
 dist/
-articles/
+flow-typed/
 
 server.js
 webpack.config.js

@@ -1,17 +1,27 @@
-import React, { Component } from 'react';
+// @flow
+import React from 'react';
 import PropTypes from 'prop-types';
-import { Col, Table } from 'react-bootstrap';
 import moment from 'moment';
 import './Tasks.scss';
 
-const Importance = {
-  Normal: 0,
-  Important: 1,
-  Critical: 2,
-};
+type Importance = 'normal' | 'important' | 'critical';
 
-export default class Tasks extends React.Component {
-  constructor(props) {
+interface Task {
+  name: string,
+  discription: string,
+  importance: Importance,
+  dueTime: moment;
+}
+
+interface TaskProps{}
+
+interface TaskState{
+    address: string,
+    selectors: string,
+}
+
+export default class Tasks extends React.Component<TaskProps, TaskState> {
+  constructor(props: TaskProps) {
     super(props);
     this.state = {
       address: '',
@@ -20,19 +30,18 @@ export default class Tasks extends React.Component {
   }
 
   render() {
-    const tasks = [
+    const tasks: Task[] = [
       {
-        name: 'первая', discription: 'описание1', importance: Importance.Normal, dueTime: moment(),
+        name: 'первая', discription: 'описание1', importance: 'normal', dueTime: moment(),
       },
       {
-        name: 'вторая', discription: 'описание2', importance: Importance.Important, dueTime: moment(),
+        name: 'вторая', discription: 'описание2', importance: 'normal', dueTime: moment(),
       },
     ];
 
-
     return (
-      <Col id='main' lg={{ span: 6, offset: 3 }} md={12}>
-        <Table>
+      <div id='main'>
+        <table>
           <thead>
             <tr>
               <td>Название</td>
@@ -51,8 +60,8 @@ export default class Tasks extends React.Component {
               </tr>
             ))}
           </tbody>
-        </Table>
-      </Col>
+        </table>
+      </div>
     );
   }
 }

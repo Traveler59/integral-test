@@ -1,8 +1,15 @@
+// @flow
 const initialState = {
 
 };
 
-const tasks = (state = initialState, action) => {
+interface AppState{}
+
+interface AppAction{
+  type: string
+}
+
+const tasks = (state:AppState = initialState, action: AppAction) => {
   switch (action.type) {
     default:
       return state;
