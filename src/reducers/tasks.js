@@ -4,7 +4,7 @@ import type { TaskActionTypes } from '../actions/types';
 import type { Task } from '../types/types';
 
 import {
-  ADD_TASK, EDIT_TASK, DELETE_TASK,
+  ADD_TASK, EDIT_TASK, DELETE_TASK, MARK_AS_DONE_TASK,
 } from '../actions/types';
 
 const initialState = {
@@ -31,6 +31,12 @@ const tasksReducer = (state: AppState = initialState, action: TaskActionTypes) =
     case DELETE_TASK: {
       const newTasks: Task[] = tasks.filter((t) => t.id !== action.id);
       return { ...state, tasks: newTasks };
+    }
+    case MARK_AS_DONE_TASK: {
+      const i = tasks.findIndex((t) => t.id === action.task.id);
+      const doneTask: Task = { ...tasks[i], doneDateTime: action.task.time };
+      tasks[i] = doneTask;
+      return { ...state, tasks: [...tasks] };
     }
     default:
       return state;

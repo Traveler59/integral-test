@@ -1,6 +1,9 @@
 // @flow
 import React from 'react';
 import { Col, Table, Button } from 'react-bootstrap';
+import type Moment from 'moment';
+import moment from 'moment';
+
 import TaskCreator from './TaskCreator';
 import TaskEditor from './TaskEditor';
 
@@ -14,6 +17,7 @@ interface Props {
   addTask: (task: Task) => void;
   editTask: (task: Task) => void;
   deleteTask: (id: string) => void;
+  markTaskAsDone: (doneDateTime: Moment, taskId: string) => void;
 }
 
 interface TaskState{
@@ -46,6 +50,10 @@ export default class Tasks extends React.Component<Props, TaskState> {
     this.setState({ ...this.state, editingTaskId: '' });
   }
 
+  markTaskAsDone = (taskId: string) => {
+    this.props.markTaskAsDone(moment(), taskId);
+  }
+
   render() {
     const { creatingNewOne, editingTaskId } = this.state;
     const { tasks } = this.props;
@@ -58,7 +66,8 @@ export default class Tasks extends React.Component<Props, TaskState> {
               <td>Название</td>
               <td>Описание</td>
               <td>Важность</td>
-              <td>Время создания</td>
+              <td>Выполнить до</td>
+              <td>Была выполнена</td>
               <td>Изменить</td>
             </tr>
           </thead>
@@ -70,9 +79,12 @@ export default class Tasks extends React.Component<Props, TaskState> {
                 <td >{t.discription}</td>
                 <td >{t.importance}</td>
                 <td >{!!t.dueDateTime && t.dueDateTime.format('DD MM   HH:mm:ss')}</td>
+                <td >{t.doneDateTime
+                  ? t.doneDateTime.format('DD MM   HH:mm:ss')
+                  : <Button onClick={() => this.markTaskAsDone(t.id)}>Выполнена</Button>}</td>
                 <td >
-                <Button onClick={() => this.startEditTask(t.id)}>Редактировать</Button> {' '}
-                <Button onClick={() => this.props.deleteTask(t.id)}>Удалить</Button>
+                  <Button onClick={() => this.startEditTask(t.id)}>Редактировать</Button> {' '}
+                  <Button onClick={() => this.props.deleteTask(t.id)}>Удалить</Button>
                 </td>
               </tr>
             ))}
@@ -82,10 +94,11 @@ export default class Tasks extends React.Component<Props, TaskState> {
                   <td >
                     <Button onClick={() => this.startCreateNew()}>Добавить</Button>
                   </td>
-                  <td></td>
-                  <td></td>
-                  <td></td>
-                  <td></td>
+                  <td/>
+                  <td/>
+                  <td/>
+                  <td/>
+                  <td/>
               </tr>}
           </tbody>
         </Table>

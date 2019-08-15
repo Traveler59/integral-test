@@ -8,6 +8,7 @@ export type Task = {
   discription: string,
   importance: Importance,
   dueDateTime: moment | null;
+  doneDateTime: moment | null;
   id: string;
 }
 

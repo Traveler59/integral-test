@@ -57,6 +57,7 @@ export default class TaskCreator extends React.Component<TaskCreatorProps, TaskC
       importance: this.state.importance,
       dueDateTime: dueTimeMoment,
       id: newUniqueId(),
+      doneDateTime: null,
     });
   }
 
@@ -120,6 +121,7 @@ export default class TaskCreator extends React.Component<TaskCreatorProps, TaskC
           </Dropdown.Menu>
         </Dropdown>
         </td>
+        <td/>
         <td>
           <Button onClick={() => { this.addTask(); }}>Сохранить</Button>
         </td>

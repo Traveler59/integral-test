@@ -23,6 +23,7 @@ interface TaskEditorState{
   importance: Importance;
   dueDate: Date | null;
   dueTime: number | null;
+  doneDateTime: moment | null;
   id: string;
 }
 
@@ -57,12 +58,13 @@ export default class TaskEditor extends React.Component<TaskEditorProps, TaskEdi
       importance: this.state.importance,
       dueDateTime: dueTimeMoment,
       id: this.state.id,
+      doneDateTime: this.state.doneDateTime,
     });
   }
 
   constructor(props: TaskEditorProps) {
     super(props);
-    const { dueDateTime } = props.task;
+    const { dueDateTime, doneDateTime } = props.task;
 
     const [dueDate, dueTime] = dueDateTime
       ? [dueDateTime.toDate(), dueDateTime.hours()]
@@ -74,12 +76,13 @@ export default class TaskEditor extends React.Component<TaskEditorProps, TaskEdi
       taskDiscription: props.task.discription,
       dueDate,
       dueTime,
+      doneDateTime,
     };
   }
 
   render() {
     const {
-      taskName, taskDiscription, importance, dueTime,
+      taskName, taskDiscription, importance, dueTime, doneDateTime,
     } = this.state;
 
     const importanceTypes = ['normal', 'important', 'critical'];
@@ -123,6 +126,7 @@ export default class TaskEditor extends React.Component<TaskEditorProps, TaskEdi
           </Dropdown.Menu>
         </Dropdown>
         </td>
+        <td >{!!doneDateTime && doneDateTime.format('DD MM   HH:mm:ss')}</td>
         <td>
           <Button onClick={() => { this.editTask(); }}>Сохранить</Button>
         </td>
