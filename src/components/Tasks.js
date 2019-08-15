@@ -1,51 +1,54 @@
 // @flow
 import React from 'react';
-import PropTypes from 'prop-types';
-import moment from 'moment';
 import { Col, Table, Button } from 'react-bootstrap';
 import TaskCreator from './TaskCreator';
+import TaskEditor from './TaskEditor';
+
+import type { Task } from '../types/types';
 
 import './Tasks.scss';
 
-type Importance = 'normal' | 'important' | 'critical';
 
-interface Task {
-  name: string,
-  discription: string,
-  importance: Importance,
-  dueDate: string | null;
-  dueTime: number | null;
+interface Props {
+  tasks: Task[];
+  addTask: (task: Task) => void;
+  editTask: (task: Task) => void;
+  deleteTask: (id: string) => void;
 }
-
-interface TaskProps{}
 
 interface TaskState{
     creatingNewOne: boolean;
-    tasks: Task[];
+    editingTaskId: string;
 }
 
-export default class Tasks extends React.Component<TaskProps, TaskState> {
-  constructor(props: TaskProps) {
+export default class Tasks extends React.Component<Props, TaskState> {
+  constructor(props: Props) {
     super(props);
     this.state = {
       creatingNewOne: false,
-      tasks: [
-        {
-          name: 'первая', discription: 'Реализовать, используя библиотеку React.js или фреймворк React Native, приложение со следующим функционалом:', importance: 'normal', dueDate: Date(), dueTime: 10
-        },
-        {
-          name: 'вторая', discription: 'описание2', importance: 'important', dueDate: Date(), dueTime: 11,
-        },
-      ],
+      editingTaskId: '',
     };
   }
 
   cancelCreating = () => this.setState({ ...this.state, creatingNewOne: false });
 
-  createNew = () => this.setState({ ...this.state, creatingNewOne: true });
+  startCreateNew = () => this.setState({ ...this.state, creatingNewOne: true });
+
+  addTask = (task: Task) => {
+    this.props.addTask(task);
+    this.setState({ ...this.state, creatingNewOne: false });
+  }
+
+  startEditTask = (id: string) => this.setState({ ...this.state, editingTaskId: id });
+
+  editTask = (task: Task) => {
+    this.props.editTask(task);
+    this.setState({ ...this.state, editingTaskId: '' });
+  }
 
   render() {
-    const { creatingNewOne, tasks } = this.state;
+    const { creatingNewOne, editingTaskId } = this.state;
+    const { tasks } = this.props;
 
     return (
       <Col id='main' lg={{ span: 10, offset: 1 }}>
@@ -60,27 +63,28 @@ export default class Tasks extends React.Component<TaskProps, TaskState> {
             </tr>
           </thead>
           <tbody>
-            {tasks.map((t, i) => (
-              <tr key={i}>
+            {tasks.map((t) => (t.id === editingTaskId
+              ? <TaskEditor key={t.id} task={t} editTask={this.editTask}/>
+              : <tr key={t.id}>
                 <td >{t.name}</td>
                 <td >{t.discription}</td>
                 <td >{t.importance}</td>
-                <td >{t.dueDate}</td>
+                <td >{!!t.dueDateTime && t.dueDateTime.format('DD MM   HH:mm:ss')}</td>
                 <td >
-                <Button>Редактировать</Button> {' '}
-                <Button>Удалить</Button>
+                <Button onClick={() => this.startEditTask(t.id)}>Редактировать</Button> {' '}
+                <Button onClick={() => this.props.deleteTask(t.id)}>Удалить</Button>
                 </td>
               </tr>
             ))}
             {creatingNewOne
-              ? <TaskCreator />
+              ? <TaskCreator addTask={this.addTask} />
               : <tr>
                   <td >
-                    <Button onClick={() => this.createNew()}>Создать</Button>
+                    <Button onClick={() => this.startCreateNew()}>Добавить</Button>
                   </td>
-                  <td ></td>
-                  <td ></td>
-                  <td ></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
                   <td></td>
               </tr>}
           </tbody>
@@ -89,6 +93,3 @@ export default class Tasks extends React.Component<TaskProps, TaskState> {
     );
   }
 }
-
-Tasks.propTypes = {
-};

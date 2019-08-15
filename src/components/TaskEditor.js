@@ -2,25 +2,19 @@
 import React from 'react';
 import moment from 'moment';
 import {
-  Col, Table, Button, FormControl, Dropdown,
+  Button, FormControl, Dropdown,
 } from 'react-bootstrap';
 
 import { DayPicker } from 'react-day-picker';
 
 import 'react-day-picker/lib/style.css';
 
-type Importance = 'normal' | 'important' | 'critical';
+import type { Task, Importance } from '../types/types';
 
-interface Task {
-  taskName: string,
-  taskDiscription: string,
-  importance: Importance,
-  dueDate: Date | null;
-  dueTime: number | null;
-}
 
 interface TaskEditorProps{
   task: Task;
+  editTask: (task: Task) => void;
 }
 
 interface TaskEditorState{
@@ -29,6 +23,7 @@ interface TaskEditorState{
   importance: Importance;
   dueDate: Date | null;
   dueTime: number | null;
+  id: string;
 }
 
 export default class TaskEditor extends React.Component<TaskEditorProps, TaskEditorState> {
@@ -50,10 +45,35 @@ export default class TaskEditor extends React.Component<TaskEditorProps, TaskEdi
     { ...this.state, dueTime: t },
   )
 
+  editTask = () => {
+    const { dueDate, dueTime } = this.state;
+
+    const dueTimeMoment: moment | null = (dueDate && dueTime)
+      ? moment(dueDate.setHours(dueTime))
+      : null;
+    this.props.editTask({
+      name: this.state.taskName,
+      discription: this.state.taskDiscription,
+      importance: this.state.importance,
+      dueDateTime: dueTimeMoment,
+      id: this.state.id,
+    });
+  }
+
   constructor(props: TaskEditorProps) {
     super(props);
+    const { dueDateTime } = props.task;
+
+    const [dueDate, dueTime] = dueDateTime
+      ? [dueDateTime.toDate(), dueDateTime.hours()]
+      : [null, null];
+
     this.state = {
       ...props.task,
+      taskName: props.task.name,
+      taskDiscription: props.task.discription,
+      dueDate,
+      dueTime,
     };
   }
 
@@ -104,7 +124,7 @@ export default class TaskEditor extends React.Component<TaskEditorProps, TaskEdi
         </Dropdown>
         </td>
         <td>
-          <Button>Сохранить</Button>
+          <Button onClick={() => { this.editTask(); }}>Сохранить</Button>
         </td>
       </tr>
     );

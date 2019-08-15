@@ -9,17 +9,13 @@ import { DayPicker } from 'react-day-picker';
 
 import 'react-day-picker/lib/style.css';
 
-type Importance = 'normal' | 'important' | 'critical';
+import type { Task, Importance } from '../types/types';
 
-interface Task {
-  name: string,
-  discription: string,
-  importance: Importance,
-  dueDate: Date | null;
-  dueTime: number | null;
-}
+const newUniqueId = () => `_${Math.random().toString(36).substr(2, 9)}`;
+
 
 interface TaskCreatorProps{
+  addTask: (task: Task) => void;
 }
 
 interface TaskCreatorState{
@@ -49,14 +45,32 @@ export default class TaskCreator extends React.Component<TaskCreatorProps, TaskC
     { ...this.state, dueTime: t },
   )
 
+  addTask = () => {
+    const { dueDate, dueTime } = this.state;
+
+    const dueTimeMoment: moment | null = (dueDate && dueTime)
+      ? moment(dueDate.setHours(dueTime))
+      : null;
+    this.props.addTask({
+      name: this.state.taskName,
+      discription: this.state.taskDiscription,
+      importance: this.state.importance,
+      dueDateTime: dueTimeMoment,
+      id: newUniqueId(),
+    });
+  }
+
   constructor(props: TaskCreatorProps) {
     super(props);
+
+    const dueDate: Date | null = null;
+    const dueTime: number | null = null;
     this.state = {
       taskName: '',
       taskDiscription: '',
       importance: 'normal',
-      dueDate: null,
-      dueTime: null,
+      dueDate,
+      dueTime,
     };
   }
 
@@ -107,7 +121,7 @@ export default class TaskCreator extends React.Component<TaskCreatorProps, TaskC
         </Dropdown>
         </td>
         <td>
-          <Button>Сохранить</Button>
+          <Button onClick={() => { this.addTask(); }}>Сохранить</Button>
         </td>
       </tr>
     );
