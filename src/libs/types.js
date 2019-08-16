@@ -15,3 +15,7 @@ export type Task = {
 export type State = {
   tasks: Task[];
 }
+
+export type ChangeEvent = {
+  target: { value: string };
+}

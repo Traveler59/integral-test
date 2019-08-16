@@ -9,9 +9,9 @@ import { DayPicker } from 'react-day-picker';
 
 import 'react-day-picker/lib/style.css';
 
-import type { Task, Importance } from '../libs/types';
+import type { Task, Importance, ChangeEvent } from '../libs/types';
 
-import { importanceToText } from '../libs/helpers';
+import { importanceToText, timeFormat, hoursInDayRange } from '../libs/helpers';
 
 interface TaskEditorProps{
   task: Task;
@@ -29,11 +29,11 @@ interface TaskEditorState{
 }
 
 export default class TaskEditor extends React.Component<TaskEditorProps, TaskEditorState> {
-  onChangeName = (e:{ target:{ value: string } }) => this.setState(
+  onChangeName = (e: ChangeEvent) => this.setState(
     { ...this.state, taskName: e.target.value },
   )
 
-  onChangeDiscription =(e:{ target:{ value: string } }) => this.setState(
+  onChangeDiscription = (e: ChangeEvent) => this.setState(
     { ...this.state, taskDiscription: e.target.value },
   )
 
@@ -62,6 +62,8 @@ export default class TaskEditor extends React.Component<TaskEditorProps, TaskEdi
       doneDateTime: this.state.doneDateTime,
     });
   }
+
+  isRequiredFieldsSet = () => this.state.taskName !== '' && this.state.taskDiscription !== '';
 
   constructor(props: TaskEditorProps) {
     super(props);
@@ -123,15 +125,17 @@ export default class TaskEditor extends React.Component<TaskEditorProps, TaskEdi
             {dueTime}
           </Dropdown.Toggle>
           <Dropdown.Menu>
-            {[7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23].map((i) => (
+            {hoursInDayRange.map((i) => (
               <Dropdown.Item key={i} onClick={() => this.setHours(i)}>{i}</Dropdown.Item>
             ))}
           </Dropdown.Menu>
         </Dropdown>
         </td>
-        <td >{!!doneDateTime && doneDateTime.format('DD MM   HH:mm:ss')}</td>
+        <td >{!!doneDateTime && doneDateTime.format(timeFormat)}</td>
         <td>
-          <Button onClick={() => { this.editTask(); }}>Сохранить</Button>
+          <Button disabled={!this.isRequiredFieldsSet()} onClick={() => { this.editTask(); }}>
+            Сохранить
+          </Button>
         </td>
       </tr>
     );

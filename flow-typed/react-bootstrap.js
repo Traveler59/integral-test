@@ -19,6 +19,10 @@ declare module 'react-bootstrap' {
 
   }
 
+  declare export class ButtonGroup extends React$Component<{}, {}> {
+
+  }
+
   declare export class FormControl extends React$Component<{}, {}> {
 
   }

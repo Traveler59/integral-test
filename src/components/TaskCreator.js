@@ -2,16 +2,16 @@
 import React from 'react';
 import moment from 'moment';
 import {
-  Col, Table, Button, FormControl, Dropdown,
+  Button, FormControl, Dropdown,
 } from 'react-bootstrap';
 
 import { DayPicker } from 'react-day-picker';
 
 import 'react-day-picker/lib/style.css';
 
-import type { Task, Importance } from '../libs/types';
+import type { Task, Importance, ChangeEvent } from '../libs/types';
 
-import { newUniqueId, importanceToText } from '../libs/helpers';
+import { newUniqueId, importanceToText, hoursInDayRange } from '../libs/helpers';
 
 
 interface TaskCreatorProps{
@@ -27,11 +27,11 @@ interface TaskCreatorState{
 }
 
 export default class TaskCreator extends React.Component<TaskCreatorProps, TaskCreatorState> {
-  onChangeName = (e:{ target:{ value: string } }) => this.setState(
+  onChangeName = (e: ChangeEvent) => this.setState(
     { ...this.state, taskName: e.target.value },
   )
 
-  onChangeDiscription =(e:{ target:{ value: string } }) => this.setState(
+  onChangeDiscription =(e: ChangeEvent) => this.setState(
     { ...this.state, taskDiscription: e.target.value },
   )
 
@@ -60,6 +60,8 @@ export default class TaskCreator extends React.Component<TaskCreatorProps, TaskC
       doneDateTime: null,
     });
   }
+
+  isRequiredFieldsSet = () => this.state.taskName !== '' && this.state.taskDiscription !== '';
 
   constructor(props: TaskCreatorProps) {
     super(props);
@@ -117,7 +119,7 @@ export default class TaskCreator extends React.Component<TaskCreatorProps, TaskC
             {dueTime}
           </Dropdown.Toggle>
           <Dropdown.Menu>
-            {[7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23].map((i) => (
+            {hoursInDayRange.map((i) => (
               <Dropdown.Item key={i} onClick={() => this.setHours(i)}>{i}</Dropdown.Item>
             ))}
           </Dropdown.Menu>
@@ -125,7 +127,9 @@ export default class TaskCreator extends React.Component<TaskCreatorProps, TaskC
         </td>
         <td/>
         <td>
-          <Button onClick={() => { this.addTask(); }}>Сохранить</Button>
+          <Button disabled={!this.isRequiredFieldsSet()} onClick={() => { this.addTask(); }}>
+            Сохранить
+          </Button>
         </td>
       </tr>
     );

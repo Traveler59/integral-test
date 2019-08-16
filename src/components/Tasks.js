@@ -1,7 +1,7 @@
 // @flow
 import React from 'react';
 import {
-  Col, Table, Button, ButtonGroup
+  Col, Table, Button, ButtonGroup,
 } from 'react-bootstrap';
 import type Moment from 'moment';
 import moment from 'moment';
@@ -10,7 +10,7 @@ import TaskCreator from './TaskCreator';
 import TaskEditor from './TaskEditor';
 
 import type { Task, Importance } from '../libs/types';
-import { importanceToText } from '../libs/helpers';
+import { importanceToText, timeFormat } from '../libs/helpers';
 
 import './Tasks.scss';
 
@@ -72,7 +72,6 @@ export default class Tasks extends React.Component<Props, TaskState> {
 
     return (
       <Col id='main' lg={{ span: 10, offset: 1 }}>
-        <br/><br/><br/>
         <ButtonGroup>
           <Button onClick={() => this.setFilter('normal')}>Обычные</Button>
           <Button onClick={() => this.setFilter('important')}>Важные</Button>
@@ -98,9 +97,12 @@ export default class Tasks extends React.Component<Props, TaskState> {
                 <td >{t.name}</td>
                 <td >{t.discription}</td>
                 <td >{importanceToText(t.importance)}</td>
-                <td >{!!t.dueDateTime && t.dueDateTime.format('DD MM   HH:mm:ss')}</td>
+                <td className={t.dueDateTime && t.dueDateTime.isBefore(moment()) ? 'overdue' : undefined}
+                  title={t.dueDateTime && t.dueDateTime.isBefore(moment()) ? 'Задача просрочена' : undefined}>
+                  {!!t.dueDateTime && t.dueDateTime.format(timeFormat)}
+                </td>
                 <td >{t.doneDateTime
-                  ? t.doneDateTime.format('DD MM   HH:mm:ss')
+                  ? t.doneDateTime.format(timeFormat)
                   : <Button onClick={() => this.markTaskAsDone(t.id)}>Выполнена</Button>}</td>
                 <td >
                   <Button onClick={() => this.startEditTask(t.id)}>Редактировать</Button> {' '}

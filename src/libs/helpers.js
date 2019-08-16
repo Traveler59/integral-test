@@ -12,3 +12,7 @@ export const importanceToText = (i: Importance) => {
       return 'Очень важная';
   }
 };
+
+export const timeFormat = 'DD.MM.YY HH:mm';
+
+export const hoursInDayRange = Array.from({ length: 24 }, (v, k) => k + 1);
