@@ -1,13 +1,15 @@
 // @flow
 import React from 'react';
-import { Col, Table, Button } from 'react-bootstrap';
+import {
+  Col, Table, Button, ButtonGroup
+} from 'react-bootstrap';
 import type Moment from 'moment';
 import moment from 'moment';
 
 import TaskCreator from './TaskCreator';
 import TaskEditor from './TaskEditor';
 
-import type { Task } from '../libs/types';
+import type { Task, Importance } from '../libs/types';
 import { importanceToText } from '../libs/helpers';
 
 import './Tasks.scss';
@@ -24,14 +26,17 @@ interface Props {
 interface TaskState{
     creatingNewOne: boolean;
     editingTaskId: string;
+    filterValue: Importance | null;
 }
 
 export default class Tasks extends React.Component<Props, TaskState> {
   constructor(props: Props) {
     super(props);
+    const filter: Importance | null = null;
     this.state = {
       creatingNewOne: false,
       editingTaskId: '',
+      filterValue: filter,
     };
   }
 
@@ -55,13 +60,26 @@ export default class Tasks extends React.Component<Props, TaskState> {
     this.props.markTaskAsDone(moment(), taskId);
   }
 
+  setFilter = (filter: Importance | null) => {
+    this.setState({ ...this.state, filterValue: filter });
+  }
+
   render() {
-    const { creatingNewOne, editingTaskId } = this.state;
+    const { creatingNewOne, editingTaskId, filterValue } = this.state;
     const { tasks } = this.props;
     console.log(tasks);
+    const filtredTasks = tasks.filter((t) => filterValue ? t.importance === filterValue : true);
 
     return (
       <Col id='main' lg={{ span: 10, offset: 1 }}>
+        <br/><br/><br/>
+        <ButtonGroup>
+          <Button onClick={() => this.setFilter('normal')}>Обычные</Button>
+          <Button onClick={() => this.setFilter('important')}>Важные</Button>
+          <Button onClick={() => this.setFilter('critical')}>Очень Важные</Button>
+          <Button onClick={() => this.setFilter(null)}>Все</Button>
+        </ButtonGroup>
+        <br/><br/><br/>
         <Table>
           <thead>
             <tr>
@@ -74,7 +92,7 @@ export default class Tasks extends React.Component<Props, TaskState> {
             </tr>
           </thead>
           <tbody>
-            {tasks.map((t) => (t.id === editingTaskId
+            {filtredTasks.map((t) => (t.id === editingTaskId
               ? <TaskEditor key={t.id} task={t} editTask={this.editTask}/>
               : <tr key={t.id}>
                 <td >{t.name}</td>
