@@ -1,14 +1,9 @@
 // @flow
-
-interface ReactBootstrapColProps {
-  lg?: | {| span: number; offset: number |},
-  md?: | {| span: number; offset: number |} | number,
-  sm?: | {| span: number; offset: number |} | number,
-}
-
 declare module 'react-bootstrap' {
   declare export class Col extends React$Component<ReactBootstrapColProps, {}> {
-
+    lg?: | {| span: number; offset: number |} | number,
+    md?: | {| span: number; offset: number |} | number,
+    sm?: | {| span: number; offset: number |} | number,
   }
 
   declare export class Table extends React$Component<{}, {}> {
@@ -34,6 +29,7 @@ declare module 'react-bootstrap' {
   declare export class OverlayTrigger extends React$Component<{}, {}> {
     hide: () => void;
   }
+
   declare export class Dropdown extends React$Component<{}, {}> {
     static Menu: typeof React$Component;
     static Toggle: typeof React$Component;

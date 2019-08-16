@@ -1,9 +1,4 @@
 // @flow
-import type {
-  Store,
-  Dispatch,
-} from 'redux';
-
 import type moment from 'moment';
 
 import type { Task } from '../libs/types';

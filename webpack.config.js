@@ -15,26 +15,12 @@ module.exports = {
         loader: 'babel-loader',
       },
       {
-        test: /\.ts$/,
-        loader: 'ts-loader',
-      },
-      {
         test: /\.css$/,
         use: [MiniCssWebpackPlugin.loader, 'css-loader'],
       },
       {
         test: /\.scss$/,
         use: [MiniCssWebpackPlugin.loader, 'css-loader', 'sass-loader'],
-      },
-      {
-        test: /\.(woff(2)?|ttf|eot|svg)(\?v=\d+\.\d+\.\d+)?$/,
-        use: [{
-          loader: 'file-loader',
-          options: {
-            name: '[name].[ext]',
-            outputPath: 'fonts/',
-          },
-        }],
       },
     ],
   },

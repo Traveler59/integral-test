@@ -1,3 +1,4 @@
+// @flow
 declare module 'redux-persist' {
   declare export var REHYDRATE: 'persist/REHYDRATE';
   declare export var persistReducer: any;
