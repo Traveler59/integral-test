@@ -67,7 +67,6 @@ export default class Tasks extends React.Component<Props, TaskState> {
   render() {
     const { creatingNewOne, editingTaskId, filterValue } = this.state;
     const { tasks } = this.props;
-    console.log(tasks);
     const filtredTasks = tasks.filter((t) => filterValue ? t.importance === filterValue : true);
 
     return (

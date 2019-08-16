@@ -1,4 +1,6 @@
 // @flow
+import { REHYDRATE } from 'redux-persist/lib/constants';
+
 import type moment from 'moment';
 
 import type { Task } from '../libs/types';
@@ -11,7 +13,6 @@ export const DELETE_TASK: 'DELETE_TASK' = 'DELETE_TASK';
 
 export const MARK_AS_DONE_TASK: 'MARK_AS_DONE_TASK' = 'MARK_AS_DONE_TASK';
 
-export const REHYDRATE: 'persist/REHYDRATE' = 'persist/REHYDRATE';
 
 export interface AddTaskAction {
   type: typeof ADD_TASK;
@@ -35,7 +36,7 @@ export interface MarkAsDoneTaskAction {
 
 export interface RehydrateAction {
   type: typeof REHYDRATE;
-  payload: { tasks:{ tasks: Task[] } };
+  payload: { tasks:{ tasks: Task[] } } | null;
 }
 
 export type TaskActionTypes = AddTaskAction

@@ -1,8 +1,9 @@
 {
-  "name": "test-integrity",
+  "name": "test-integral",
   "version": "0.8.0",
   "main": "index.js",
   "scripts": {
+    "install-types": "flow-typed install express moment prop-types redux react-redux",
     "start": "babel-node --presets @babel/env server.js",
     "build": "webpack --mode production",
     "watch": "webpack --watch --mode development"

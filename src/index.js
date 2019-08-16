@@ -8,7 +8,7 @@ import { PersistGate } from 'redux-persist/integration/react';
 import App from './containers/App';
 import configureStore from './store/configureStore';
 
-const { store, persistor } = configureStore({ tasks: [] });
+const { store, persistor } = configureStore({ tasks: { tasks: [] } });
 
 const root = document.getElementById('root');
 

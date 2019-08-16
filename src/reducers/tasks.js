@@ -1,7 +1,7 @@
 // @flow
 import moment from 'moment';
 
-import { REHYDRATE } from 'redux-persist';
+import { REHYDRATE } from 'redux-persist/lib/constants';
 
 import type { TaskActionTypes } from '../actions/types';
 
@@ -24,11 +24,13 @@ const tasksReducer = (state: AppState = initialState, action: TaskActionTypes) =
   const { tasks } = state;
   switch (action.type) {
     case REHYDRATE: {
-      const newTasks: Task[] = action.payload.tasks.tasks.map((t) => {
-        const dueDateTime = t.dueDateTime ? moment(t.dueDateTime) : null;
-        const doneDateTime = t.doneDateTime ? moment(t.doneDateTime) : null;
-        return ({ ...t, dueDateTime, doneDateTime });
-      });
+      const newTasks: Task[] = action.payload
+        ? action.payload.tasks.tasks.map((t) => {
+          const dueDateTime = t.dueDateTime ? moment(t.dueDateTime) : null;
+          const doneDateTime = t.doneDateTime ? moment(t.doneDateTime) : null;
+          return ({ ...t, dueDateTime, doneDateTime });
+        })
+        : [];
       return { ...state, tasks: newTasks };
     }
     case ADD_TASK: {
