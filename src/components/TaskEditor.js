@@ -29,7 +29,7 @@ interface TaskEditorState{
 }
 
 export default class TaskEditor extends React.Component<TaskEditorProps, TaskEditorState> {
-  overlay: any;
+  overlay: null | OverlayTrigger;
 
   onChangeName = (e: ChangeEvent) => this.setState(
     { ...this.state, taskName: e.target.value },
@@ -42,7 +42,9 @@ export default class TaskEditor extends React.Component<TaskEditorProps, TaskEdi
   setImportance = (i: Importance) => this.setState({ ...this.state, importance: i })
 
   onDayClick = (d: Date) => {
-    this.overlay.hide();
+    if(this.overlay) {
+      this.overlay.hide();
+    }  
     this.setState({ ...this.state, dueDate: d });
   }
 
@@ -121,8 +123,8 @@ export default class TaskEditor extends React.Component<TaskEditorProps, TaskEdi
         </Dropdown>
         </td>
         <td>
-          <OverlayTrigger ref={(overlay: any) => { this.overlay = overlay; }} trigger='click' placement='bottom' overlay={
-            <Popover id='calendar-popover'>
+          <OverlayTrigger ref={(overlay) => { this.overlay = overlay; }} trigger='click' placement='bottom' overlay={
+            <Popover>
               <DayPicker onDayClick={this.onDayClick} />
             </Popover>}>
             <Button >{dueDate ? moment(dueDate).format('DD:MM:YY') : 'Выберите дату'}</Button>

@@ -5,7 +5,9 @@ declare module 'redux-persist' {
 }
 
 declare module 'redux-persist/integration/react' {
-  declare module.exports: any;
+  declare export class PersistGate extends React$Component<{}, {}> {
+
+  }
 }
 
 declare module 'redux-persist/lib/storage' {

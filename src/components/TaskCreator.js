@@ -27,7 +27,7 @@ interface TaskCreatorState{
 }
 
 export default class TaskCreator extends React.Component<TaskCreatorProps, TaskCreatorState> {
-  overlay: any;
+  overlay: null | OverlayTrigger;
 
   onChangeName = (e: ChangeEvent) => this.setState(
     { ...this.state, taskName: e.target.value },
@@ -40,7 +40,9 @@ export default class TaskCreator extends React.Component<TaskCreatorProps, TaskC
   setImportance = (i: Importance) => this.setState({ ...this.state, importance: i })
 
   onDayClick = (d: Date) => {
-    this.overlay.hide();
+    if(this.overlay) {
+      this.overlay.hide();
+    }  
     this.setState({ ...this.state, dueDate: d });
   }
 
@@ -115,7 +117,7 @@ export default class TaskCreator extends React.Component<TaskCreatorProps, TaskC
         </Dropdown>
         </td>
         <td>
-          <OverlayTrigger ref={(overlay: any) => { this.overlay = overlay; }} trigger='click' placement='bottom' overlay={
+          <OverlayTrigger ref={(overlay) => { this.overlay = overlay; }} trigger='click' placement='bottom' overlay={
             <Popover id='calendar-popover'>
               <DayPicker onDayClick={this.onDayClick} />
             </Popover>}>

@@ -16,7 +16,7 @@ declare module 'react-bootstrap' {
   }
 
   declare export class Button extends React$Component<{}, {}> {
-
+    disabled: boolean
   }
 
   declare export class ButtonGroup extends React$Component<{}, {}> {
@@ -32,7 +32,7 @@ declare module 'react-bootstrap' {
   }
 
   declare export class OverlayTrigger extends React$Component<{}, {}> {
-
+    hide: () => void;
   }
   declare export class Dropdown extends React$Component<{}, {}> {
     static Menu: typeof React$Component;
