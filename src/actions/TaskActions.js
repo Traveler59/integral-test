@@ -6,7 +6,7 @@ import type {
 
 import type moment from 'moment';
 
-import type { Task } from '../types/types';
+import type { Task } from '../libs/types';
 
 import {
   ADD_TASK, EDIT_TASK, DELETE_TASK, MARK_AS_DONE_TASK,
@@ -22,9 +22,9 @@ export const addTask = (task: Task): TaskActionTypes => ({
   task,
 });
 
-export const editTask = (task: Task): TaskActionTypes => ({
+export const editTask = (editedTask: Task): TaskActionTypes => ({
   type: EDIT_TASK,
-  task,
+  editedTask,
 });
 
 export const deleteTask = (id: string): TaskActionTypes => ({

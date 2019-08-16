@@ -8,7 +8,7 @@ import thunk from 'redux-thunk';
 
 import rootReducer from '../reducers';
 
-import type { State } from '../types/types';
+import type { State } from '../libs/types';
 
 
 const persistedReducer = persistReducer({

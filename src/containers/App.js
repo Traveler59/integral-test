@@ -10,7 +10,7 @@ import {
   addTask, editTask, deleteTask, markTaskAsDone,
 } from '../actions/TaskActions';
 import Tasks from '../components/Tasks';
-import type { State, Task } from '../types/types';
+import type { State, Task } from '../libs/types';
 
 
 interface Props {

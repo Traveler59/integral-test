@@ -9,9 +9,9 @@ import { DayPicker } from 'react-day-picker';
 
 import 'react-day-picker/lib/style.css';
 
-import type { Task, Importance } from '../types/types';
+import type { Task, Importance } from '../libs/types';
 
-const newUniqueId = () => `_${Math.random().toString(36).substr(2, 9)}`;
+import { newUniqueId, importanceToText } from '../libs/helpers';
 
 
 interface TaskCreatorProps{
@@ -98,11 +98,13 @@ export default class TaskCreator extends React.Component<TaskCreatorProps, TaskC
         <td>
         <Dropdown>
           <Dropdown.Toggle>
-            {importance}
+            {importanceToText(importance)}
           </Dropdown.Toggle>
           <Dropdown.Menu>
             {importanceTypes.map((i) => (
-              <Dropdown.Item key={i} onClick={() => this.setImportance(i)}>{i}</Dropdown.Item>
+              <Dropdown.Item key={i} onClick={() => this.setImportance(i)}>
+                {importanceToText(i)}
+              </Dropdown.Item>
             ))}
           </Dropdown.Menu>
         </Dropdown>

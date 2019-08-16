@@ -7,7 +7,8 @@ import moment from 'moment';
 import TaskCreator from './TaskCreator';
 import TaskEditor from './TaskEditor';
 
-import type { Task } from '../types/types';
+import type { Task } from '../libs/types';
+import { importanceToText } from '../libs/helpers';
 
 import './Tasks.scss';
 
@@ -57,6 +58,7 @@ export default class Tasks extends React.Component<Props, TaskState> {
   render() {
     const { creatingNewOne, editingTaskId } = this.state;
     const { tasks } = this.props;
+    console.log(tasks);
 
     return (
       <Col id='main' lg={{ span: 10, offset: 1 }}>
@@ -77,7 +79,7 @@ export default class Tasks extends React.Component<Props, TaskState> {
               : <tr key={t.id}>
                 <td >{t.name}</td>
                 <td >{t.discription}</td>
-                <td >{t.importance}</td>
+                <td >{importanceToText(t.importance)}</td>
                 <td >{!!t.dueDateTime && t.dueDateTime.format('DD MM   HH:mm:ss')}</td>
                 <td >{t.doneDateTime
                   ? t.doneDateTime.format('DD MM   HH:mm:ss')

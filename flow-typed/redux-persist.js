@@ -1,5 +1,7 @@
 declare module 'redux-persist' {
-  declare module.exports: any;
+  declare export var REHYDRATE: 'persist/REHYDRATE';
+  declare export var persistReducer: any;
+  declare export var persistStore: any;
 }
 
 declare module 'redux-persist/es/integration/react' {

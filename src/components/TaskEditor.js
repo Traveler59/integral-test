@@ -9,8 +9,9 @@ import { DayPicker } from 'react-day-picker';
 
 import 'react-day-picker/lib/style.css';
 
-import type { Task, Importance } from '../types/types';
+import type { Task, Importance } from '../libs/types';
 
+import { importanceToText } from '../libs/helpers';
 
 interface TaskEditorProps{
   task: Task;
@@ -103,11 +104,13 @@ export default class TaskEditor extends React.Component<TaskEditorProps, TaskEdi
         <td>
         <Dropdown>
           <Dropdown.Toggle>
-            {importance}
+            {importanceToText(importance)}
           </Dropdown.Toggle>
           <Dropdown.Menu>
             {importanceTypes.map((i) => (
-              <Dropdown.Item key={i} onClick={() => this.setImportance(i)}>{i}</Dropdown.Item>
+              <Dropdown.Item key={i} onClick={() => this.setImportance(i)}>
+                {importanceToText(i)}
+              </Dropdown.Item>
             ))}
           </Dropdown.Menu>
         </Dropdown>
