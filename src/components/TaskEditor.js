@@ -2,7 +2,7 @@
 import React from 'react';
 import moment from 'moment';
 import {
-  Button, FormControl, Dropdown,
+  Button, FormControl, Dropdown, OverlayTrigger, Popover
 } from 'react-bootstrap';
 
 import { DayPicker } from 'react-day-picker';
@@ -29,6 +29,8 @@ interface TaskEditorState{
 }
 
 export default class TaskEditor extends React.Component<TaskEditorProps, TaskEditorState> {
+  overlay: any;
+
   onChangeName = (e: ChangeEvent) => this.setState(
     { ...this.state, taskName: e.target.value },
   )
@@ -39,9 +41,10 @@ export default class TaskEditor extends React.Component<TaskEditorProps, TaskEdi
 
   setImportance = (i: Importance) => this.setState({ ...this.state, importance: i })
 
-  onDayClick = (d: Date) => this.setState(
-    { ...this.state, dueDate: d },
-  )
+  onDayClick = (d: Date) => {
+    this.overlay.hide();
+    this.setState({ ...this.state, dueDate: d });
+  }
 
   setHours = (t: number) => this.setState(
     { ...this.state, dueTime: t },
@@ -85,7 +88,7 @@ export default class TaskEditor extends React.Component<TaskEditorProps, TaskEdi
 
   render() {
     const {
-      taskName, taskDiscription, importance, dueTime, doneDateTime,
+      taskName, taskDiscription, importance, dueTime, dueDate, doneDateTime,
     } = this.state;
 
     const importanceTypes = ['normal', 'important', 'critical'];
@@ -118,18 +121,25 @@ export default class TaskEditor extends React.Component<TaskEditorProps, TaskEdi
         </Dropdown>
         </td>
         <td>
-          <DayPicker onDayClick={this.onDayClick}/>
+          <OverlayTrigger ref={(overlay: any) => { this.overlay = overlay; }} trigger='click' placement='bottom' overlay={
+            <Popover id='calendar-popover'>
+              <DayPicker onDayClick={this.onDayClick} />
+            </Popover>}>
+            <Button >{dueDate ? moment(dueDate).format('DD:MM:YY') : 'Выберите дату'}</Button>
+          </OverlayTrigger>
+          <br/>
+          <br/>
 
           <Dropdown>
-          <Dropdown.Toggle>
-            {dueTime}
-          </Dropdown.Toggle>
-          <Dropdown.Menu>
-            {hoursInDayRange.map((i) => (
-              <Dropdown.Item key={i} onClick={() => this.setHours(i)}>{i}</Dropdown.Item>
-            ))}
-          </Dropdown.Menu>
-        </Dropdown>
+            <Dropdown.Toggle>
+              {!!dueTime ? `${dueTime} часов` : 'Выберите время'}
+            </Dropdown.Toggle>
+            <Dropdown.Menu>
+              {hoursInDayRange.map((i) => (
+                <Dropdown.Item key={i} onClick={() => this.setHours(i)}>{i}</Dropdown.Item>
+              ))}
+            </Dropdown.Menu>
+          </Dropdown>
         </td>
         <td >{!!doneDateTime && doneDateTime.format(timeFormat)}</td>
         <td>
