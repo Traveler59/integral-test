@@ -35,8 +35,8 @@ declare module 'react-bootstrap' {
 
   }
   declare export class Dropdown extends React$Component<{}, {}> {
-    static Menu: typeof DropdownMenu;
-    static Toggle: typeof DropdownToggle;
-    static Item: typeof DropdownItem;
+    static Menu: typeof React$Component;
+    static Toggle: typeof React$Component;
+    static Item: typeof React$Component;
   }
 }

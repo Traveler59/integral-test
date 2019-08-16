@@ -4,7 +4,7 @@ declare module 'redux-persist' {
   declare export var persistStore: any;
 }
 
-declare module 'redux-persist/es/integration/react' {
+declare module 'redux-persist/integration/react' {
   declare module.exports: any;
 }
 

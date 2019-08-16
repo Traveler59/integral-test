@@ -7,7 +7,7 @@ import {
 
 import { DayPicker } from 'react-day-picker';
 
-import 'react-day-picker/lib/style.css';
+import '../../style-libs/react-day-picker.css';
 
 import type { Task, Importance, ChangeEvent } from '../libs/types';
 
