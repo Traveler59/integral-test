@@ -69,13 +69,16 @@ export default class Tasks extends React.Component<Props, TaskState> {
     const { tasks } = this.props;
     const filtredTasks = tasks.filter((t) => filterValue ? t.importance === filterValue : true);
 
+    const isTaskOverdue = (t: Task) => t.dueDateTime && t.dueDateTime.isBefore(moment())
+      && !t.doneDateTime;
+
     return (
       <Col id='main' lg={{ span: 10, offset: 1 }}>
         <ButtonGroup>
+          <Button onClick={() => this.setFilter(null)}>Все</Button>
           <Button onClick={() => this.setFilter('normal')}>Обычные</Button>
           <Button onClick={() => this.setFilter('important')}>Важные</Button>
           <Button onClick={() => this.setFilter('critical')}>Очень Важные</Button>
-          <Button onClick={() => this.setFilter(null)}>Все</Button>
         </ButtonGroup>
         <br/><br/><br/>
         <Table>
@@ -96,8 +99,8 @@ export default class Tasks extends React.Component<Props, TaskState> {
                 <td >{t.name}</td>
                 <td >{t.discription}</td>
                 <td >{importanceToText(t.importance)}</td>
-                <td className={t.dueDateTime && t.dueDateTime.isBefore(moment()) ? 'overdue' : undefined}
-                  title={t.dueDateTime && t.dueDateTime.isBefore(moment()) ? 'Задача просрочена' : undefined}>
+                <td className={isTaskOverdue(t) ? 'overdue' : undefined}
+                  title={isTaskOverdue(t) ? 'Задача просрочена' : undefined}>
                   {!!t.dueDateTime && t.dueDateTime.format(timeFormat)}
                 </td>
                 <td >{t.doneDateTime
