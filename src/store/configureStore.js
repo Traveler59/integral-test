@@ -6,7 +6,7 @@ import type { Dispatch } from 'redux';
 import { persistStore, persistReducer } from 'redux-persist';
 import storage from 'redux-persist/lib/storage';
 
-import { ThunkMiddleware as thunk } from 'redux-thunk';
+import thunk from 'redux-thunk';
 
 import rootReducer, { type Reducers } from '../reducers';
 

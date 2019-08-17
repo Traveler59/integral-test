@@ -15,5 +15,3 @@ export const importanceToText = (i: Importance) => {
 };
 
 export const timeFormat = 'DD.MM.YY HH:mm';
-
-export const hoursInDayRange: number[] = Array.from({ length: 24 }, (v, k) => k + 1);

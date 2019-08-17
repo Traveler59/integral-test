@@ -17,5 +17,5 @@ export type State = {
 }
 
 export type ChangeEvent = {
-  target: { value: string };
+  target: { value: string, valueAsNumber: number; };
 }

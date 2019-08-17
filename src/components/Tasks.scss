@@ -5,3 +5,14 @@
 .overdue{
   color: rgb(255, 30, 0);
 }
+
+.timeSetter{
+  display: flex;
+  input{
+    width: 70px;
+  }
+  span{
+    font-size: 25px;
+    padding: 0px 7px;
+  }
+}

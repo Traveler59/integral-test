@@ -11,7 +11,7 @@ import '../../style-libs/react-day-picker.css';
 
 import type { Task, Importance, ChangeEvent } from '../libs/types';
 
-import { newUniqueId, importanceToText, hoursInDayRange } from '../libs/helpers';
+import { newUniqueId, importanceToText } from '../libs/helpers';
 
 
 interface TaskCreatorProps{
@@ -23,7 +23,8 @@ interface TaskCreatorState{
   taskDiscription: string,
   importance: Importance;
   dueDate: Date | null;
-  dueTime: number | null;
+  dueTimeHours: number | null;
+  dueTimeMinutes: number | null;
 }
 
 export default class TaskCreator extends React.Component<TaskCreatorProps, TaskCreatorState> {
@@ -40,21 +41,25 @@ export default class TaskCreator extends React.Component<TaskCreatorProps, TaskC
   setImportance = (i: Importance) => this.setState({ ...this.state, importance: i })
 
   onDayClick = (d: Date) => {
-    if(this.overlay) {
+    if (this.overlay) {
       this.overlay.hide();
-    }  
+    }
     this.setState({ ...this.state, dueDate: d });
   }
 
-  setHours = (t: number) => this.setState(
-    { ...this.state, dueTime: t },
+  onChangeHours = (e: ChangeEvent) => this.setState(
+    { ...this.state, dueTimeHours: e.target.valueAsNumber },
+  )
+
+  onChangeMinutes = (e: ChangeEvent) => this.setState(
+    { ...this.state, dueTimeMinutes: e.target.valueAsNumber },
   )
 
   addTask = () => {
-    const { dueDate, dueTime } = this.state;
+    const { dueDate, dueTimeHours, dueTimeMinutes } = this.state;
 
-    const dueTimeMoment: moment | null = (dueDate && dueTime)
-      ? moment(dueDate.setHours(dueTime))
+    const dueTimeMoment: moment | null = (dueDate && dueTimeHours && dueTimeMinutes)
+      ? moment(dueDate.setHours(dueTimeHours)).minutes(dueTimeMinutes)
       : null;
     this.props.addTask({
       name: this.state.taskName,
@@ -66,25 +71,32 @@ export default class TaskCreator extends React.Component<TaskCreatorProps, TaskC
     });
   }
 
-  isRequiredFieldsSet = () => this.state.taskName !== '' && this.state.taskDiscription !== '';
+  isRequiredFieldsSet = () => this.state.taskName !== ''
+  && this.state.taskDiscription !== ''
+  && (this.state.dueTimeHours === null
+    || (this.state.dueTimeHours < 24 && this.state.dueTimeHours > 0))
+  && (this.state.dueTimeMinutes === null
+    || (this.state.dueTimeMinutes < 60 && this.state.dueTimeMinutes > 0));
 
   constructor(props: TaskCreatorProps) {
     super(props);
 
     const dueDate: Date | null = null;
-    const dueTime: number | null = null;
+    const dueTimeHours: number | null = null;
+    const dueTimeMinutes: number | null = null;
     this.state = {
       taskName: '',
       taskDiscription: '',
       importance: 'normal',
       dueDate,
-      dueTime,
+      dueTimeHours,
+      dueTimeMinutes,
     };
   }
 
   render() {
     const {
-      taskName, taskDiscription, importance, dueTime, dueDate,
+      taskName, taskDiscription, importance, dueDate, dueTimeHours, dueTimeMinutes,
     } = this.state;
 
     const importanceTypes = ['normal', 'important', 'critical'];
@@ -125,17 +137,11 @@ export default class TaskCreator extends React.Component<TaskCreatorProps, TaskC
           </OverlayTrigger>
           <br/>
           <br/>
-
-          <Dropdown>
-            <Dropdown.Toggle>
-              {!!dueTime ? `${dueTime} часов` : 'Выберите время'}
-            </Dropdown.Toggle>
-            <Dropdown.Menu>
-              {hoursInDayRange.map((i) => (
-                <Dropdown.Item key={i} onClick={() => this.setHours(i)}>{i}</Dropdown.Item>
-              ))}
-            </Dropdown.Menu>
-          </Dropdown>
+          <div className='timeSetter'>
+            <FormControl value={ dueTimeHours } type='number' min='0' max='23' step='1' onChange={ this.onChangeHours }/>
+            <span>:</span>
+            <FormControl value={ dueTimeMinutes } type='number' min='0' max='59' step='1' onChange={ this.onChangeMinutes }/>
+          </div>
         </td>
         <td/>
         <td>
