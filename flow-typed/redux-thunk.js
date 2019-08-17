@@ -1,4 +1,6 @@
 // @flow
+import type { Middleware } from 'redux';
+
 declare module 'redux-thunk' {
-  declare module.exports: any;
+  declare var ThunkMiddleware: Middleware;
 }
